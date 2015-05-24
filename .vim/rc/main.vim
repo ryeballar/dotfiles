@@ -5,7 +5,6 @@ if $COLORTERM == 'mate-terminal' || $COLORTERM == 'gnome-terminal'
 endif
 
 " Now that we have 256bit color, we can set our colorscheme
-" color vimtana
 color jellybeans
 
 " Turn on auto indention and make it smart! :)
@@ -20,8 +19,10 @@ set scrolloff=8
 set foldcolumn=1
 
 " Make sure that we have a text guide for typing at only 80 chars MAX...
-set textwidth=78
-set colorcolumn=80
+" set textwidth=78
+set textwidth=0
+" set colorcolumn=80
+set colorcolumn=0
 
 " Turn backup off, since most stuff is in SVN, git ,etc.. anyway...  set nobackup
 set nowb
@@ -80,7 +81,7 @@ set ignorecase
 set smartcase
 
 " Enable mouse so we can move splits and stuff
-set mouse=
+set mouse=a
 
 " Enable system clipboard IF TMUX is not used
 if $TMUX == ''
@@ -183,31 +184,31 @@ command W w !sudo tee % > /dev/null
 " lets clean the file before we save it!
 autocmd BufWritePre,FileWritePre * :g/\s\+$/s/\s\+$//g
 
-" FUNCTION to Convert PRE php 5.4 array syntax to new 5.4+ syntax...
-function! PHPShortHandArrayConverter() range
-	" We need a place to store the count...
-	" Count the number of matches
-	let l:count=[0] | %s/[aA]rray\(.*\)(\zs/\=map(l:count,'v:val+1')[1:]/ge
+" Set background to dark
+set background=dark
+" Transparent Overall Background
+highlight Normal ctermbg=NONE
 
-	" Replace empty arrays first
-	execute "normal :%s/[aA]rray\(.*\)()/[]/ge\<CR>"
+"Transparent None Text Background
+highlight nonText ctermbg=NONE
 
-	" Check if we have more than 1
-	while l:count[0] > 0
-		" Find the instances
-		execute "normal gg?[aA]rray\\(.*\\)(\<CR>"
+" Transparent Cursor Line
+hi CursorLine ctermbg=NONE
 
-		" Remove the array word
-		execute "normal dwa\<CR>"
+" Transparent Line Number Background
+hi LineNr ctermbg=NONE
 
-		" raplace ( with [
-		execute "normal cs(]"
+" Transparent tabs and spaces
+highlight SpecialKey ctermbg=NONE
 
-		" We need a place to store the count...
-		" Count the number of matches
-		let l:count=[0] | %s/[aA]rray\(.*\)(\zs/\=map(l:count,'v:val+1')[1:]/ge
-	endwhile
-endfunction
+" Overwrite :W with :w
+command! W  write
+
+"To create a new tab
+nnoremap <C-t> :tabnew<Enter>
+
+" Close vim tab
+nnoremap <C-q> :q<Enter>
 
 " FUNCTION FOR VISUAL SECTION SEARCHING
 function! VisualSelection(direction, extra_filter) range
